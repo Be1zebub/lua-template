@@ -2,6 +2,7 @@
 php style html+lua inline templater for luvit
 
 # usage
+![image](https://user-images.githubusercontent.com/34854689/221267968-61452ddc-7f4d-476a-af30-0ca8346c215b.png)
 ```lua
 local luaTemplate = require("lua-template")
 
