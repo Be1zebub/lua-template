@@ -19,6 +19,7 @@ return function(luaTemplate)
 		setmetatable(env or {}, {__index = _G})
 		env.print = print_buffer
 		env.require = require
+		env.luaTemplate = self
 
 		code = self:parse(code, stdout, tag_open, tag_close)
 		local fn, syntaxError = load(code, "luaTemplate", "t", env)

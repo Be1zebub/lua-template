@@ -1,6 +1,8 @@
 local luaTemplate = require("lua-template")
 local relative = require("relative")
 
+luaTemplate.debug = true
+
 require("http").createServer(function (req, res)
 	coroutine.wrap(function()
 		local succ, stdout = luaTemplate:include(relative("index.html"), 10, {

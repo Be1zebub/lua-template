@@ -1,11 +1,11 @@
 local cache = {}
-local time = require("uv").hrtime
+local time = require("uv").uptime
 
 return function(luaTemplate)
 	function luaTemplate:getCache(uid)
 		if uid == nil then return cache end
 
-		if cache[uid] and cache[uid].aliveUntil < time() then
+		if cache[uid] and cache[uid].aliveUntil > time() then
 			return cache[uid].func
 		end
 	end
@@ -21,7 +21,7 @@ return function(luaTemplate)
 		compiled = self:compile(code, env)
 		cache[uid] = {
 			func = compiled,
-			aliveUntil = time() + (ttl or 10) * 1000 -- nano seconds > seconds
+			aliveUntil = time() + (ttl or 10)
 		}
 
 		return compiled

@@ -1,42 +1,60 @@
+<lua>
+	function Hex(r, g, b)
+		return string.format("#%x", (r * 0x10000) + (g * 0x100) + b):upper()
+	end
+</lua>
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<title>lua-template <lua>
-		print(_VERSION)
-	</lua></title>
+	<style type="text/css">
+		h1 {
+			color: <lua>
+				print(Hex(44, 62, 80))
+			</lua>
+		}
+
+		.user {
+			display: table;
+		}
+
+		.avatar {
+			width: 96px;
+			height: 96px;
+			border-radius: 50%;
+		}
+
+		.user > span {
+			display: table-cell;
+			vertical-align: middle;
+		}
+
+		.name {
+			font-size: 24px;
+		}
+	</style>
 </head>
 <body>
-	<lua>
-		for i = 1, 3 do
-	</lua>
-		<h4>Test <lua>
-			print(i)
-		</lua></h4>
-	<lua>
-		end
-	</lua>
+	<h1>Current time: <lua> print(os.time()) </lua></h1>
 
 	<lua>
-		if true then
-	</lua>
-		<h1>Yes!</h1>
-	<lua>
-		end
-	</lua>
+		local users = {
+			{id = 1, name = "Beelzebub", avatar = "https://avatars.githubusercontent.com/u/34854689", admin = true},
+			{id = 2, name = "John Doe", avatar = "https://i.imgur.com/gQMQB7e.jpeg"}
+		}
 
-	<lua>
-		if false then
+		for i, user in ipairs(users) do
 	</lua>
-		<h1>No(</h1>
+		<div class="user" id="user-<lua> print(user.id) </lua>">
+			<img class="avatar" src="<lua> print(user.avatar) </lua>">
+			<span class="name"><lua> print(user.name) </lua></span>
+			<lua>
+				if user.admin then
+			</lua>
+				<span> (admin)</span>
+			<lua>
+				end
+			</lua>
+		</div>
 	<lua>
-		end
-	</lua>
-
-	<lua>
-		for i, header in ipairs(req.headers) do
-			if header[1] == "User-Agent" then
-				print("user-Agent: ".. header[2])
-			end
 		end
 	</lua>
 </body>
