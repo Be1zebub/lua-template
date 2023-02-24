@@ -1,0 +1,43 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>lua-template <lua>
+		print(_VERSION)
+	</lua></title>
+</head>
+<body>
+	<lua>
+		for i = 1, 3 do
+	</lua>
+		<h4>Test <lua>
+			print(i)
+		</lua></h4>
+	<lua>
+		end
+	</lua>
+
+	<lua>
+		if true then
+	</lua>
+		<h1>Yes!</h1>
+	<lua>
+		end
+	</lua>
+
+	<lua>
+		if false then
+	</lua>
+		<h1>No(</h1>
+	<lua>
+		end
+	</lua>
+
+	<lua>
+		for i, header in ipairs(req.headers) do
+			if header[1] == "User-Agent" then
+				print("user-Agent: ".. header[2])
+			end
+		end
+	</lua>
+</body>
+</html>
