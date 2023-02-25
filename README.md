@@ -73,7 +73,7 @@ local succ, stdout = luaTemplate:include("index.html", 10, { -- file-path, cache
 </body>
 </html>
 ```
-
+![image](https://user-images.githubusercontent.com/34854689/221267968-61452ddc-7f4d-476a-af30-0ca8346c215b.png)
 # notes
 string buffer support required!
 you can get latest luvit build here: https://github.com/truemedian/luvit-bin
