@@ -12,15 +12,16 @@ require("cache")(luaTemplate)
 require("eval")(luaTemplate)
 require("include")(luaTemplate)
 
-function luaTemplate:load(code, uid, ttl, env)
+function luaTemplate:load(code, uid, ttl, env, tag_open, tag_close)
 	return self:eval(
-		self:cache(code, uid, ttl, env), env
+		self:cache(code, uid, ttl, env, tag_open, tag_close),
+		env, tag_open, tag_close
 	)
 end
 
 setmetatable(luaTemplate, {
-	__call = function(_, code, uid, ttl, env)
-		luaTemplate:load(code, uid, ttl, env)
+	__call = function(_, code, uid, ttl, env, tag_open, tag_close)
+		luaTemplate:load(code, uid, ttl, env, tag_open, tag_close)
 	end
 })
 

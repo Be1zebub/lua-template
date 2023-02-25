@@ -77,3 +77,6 @@ local succ, stdout = luaTemplate:include("index.html", 10, { -- file-path, cache
 # notes
 string buffer support required!
 you can get latest luvit build here: https://github.com/truemedian/luvit-bin
+ 
+dont like `<lua> ... </lua>` xml tag style? 
+you can pass `"<?lua"` in `tag_open` & `?>` in `tag_close` arguments

@@ -10,7 +10,7 @@ return function(luaTemplate)
 		end
 	end
 
-	function luaTemplate:cache(code, uid, ttl, env)
+	function luaTemplate:cache(code, uid, ttl, env, tag_open, tag_close)
 		if uid == nil then
 			uid = debug.traceback()
 		end
@@ -18,7 +18,7 @@ return function(luaTemplate)
 		local compiled = self:getCache(uid)
 		if compiled then return compiled end
 
-		compiled = self:compile(code, env)
+		compiled = self:compile(code, env, tag_open, tag_close)
 		cache[uid] = {
 			func = compiled,
 			aliveUntil = time() + (ttl or 10)
