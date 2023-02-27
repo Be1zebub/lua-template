@@ -9,6 +9,10 @@ local succ, stdout = luaTemplate:include("index.html", 10, { -- file-path, cache
 	req = req,
 	res = res
 })
+
+res:setHeader("Content-Type", "text/html")
+res:setHeader("Content-Length", #stdout)
+res:finish(stdout)
 ```
 ```html
 <lua>
@@ -20,13 +24,12 @@ local succ, stdout = luaTemplate:include("index.html", 10, { -- file-path, cache
 <head>
 	<style type="text/css">
 		h1 {
-			color: <lua>
-				print(Hex(44, 62, 80))
-			</lua>
+			color: ${ Hex(22, 160, 133) };
 		}
 
 		.user {
 			display: table;
+			margin-top: 16px;
 		}
 
 		.avatar {
@@ -38,15 +41,20 @@ local succ, stdout = luaTemplate:include("index.html", 10, { -- file-path, cache
 		.user > span {
 			display: table-cell;
 			vertical-align: middle;
+			white-space: pre;
 		}
 
 		.name {
 			font-size: 24px;
 		}
+
+		.admin {
+			color: #c0392b;
+		}
 	</style>
 </head>
 <body>
-	<h1>Current time: <lua> print(os.time()) </lua></h1>
+	<h1>Current time: ${os.time()}</h1>
 
 	<lua>
 		local users = {
@@ -56,13 +64,13 @@ local succ, stdout = luaTemplate:include("index.html", 10, { -- file-path, cache
 
 		for i, user in ipairs(users) do
 	</lua>
-		<div class="user" id="user-<lua> print(user.id) </lua>">
-			<img class="avatar" src="<lua> print(user.avatar) </lua>">
-			<span class="name"><lua> print(user.name) </lua></span>
+		<div class="user" id="user-${user.id}">
+			<img class="avatar" src="${user.avatar}">
+			<span class="name"> ${user.name}</span>
 			<lua>
 				if user.admin then
 			</lua>
-				<span> (admin)</span>
+				<span class="admin"> (admin)</span>
 			<lua>
 				end
 			</lua>
