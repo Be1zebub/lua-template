@@ -85,7 +85,7 @@ res:finish(stdout)
 ![DOM Preview](https://user-images.githubusercontent.com/34854689/221614401-37bcf860-554f-466c-a7a0-abf5d3da3407.png)
 
 # notes
-string buffer support required!
+string buffer support required! 
 to got string buffer support, you can get latest luvit build here: https://github.com/truemedian/luvit-bin
  
 dont like `<lua> ... </lua>` xml tag style? 
