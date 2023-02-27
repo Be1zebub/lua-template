@@ -21,7 +21,7 @@ return function(luaTemplate)
 			if tag_start == nil then break end
 
 			if tag_start > prev_f then
-				buff:put(raw2code:format(
+				stdout:put(raw2code:format(
 					code:sub(prev_f, tag_start - 1)
 				))
 			end
