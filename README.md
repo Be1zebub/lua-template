@@ -81,10 +81,12 @@ res:finish(stdout)
 </body>
 </html>
 ```
-![image](https://user-images.githubusercontent.com/34854689/221267968-61452ddc-7f4d-476a-af30-0ca8346c215b.png)
+![Preview](https://user-images.githubusercontent.com/34854689/221614096-5cbb3d1c-e70a-46d3-81a8-76e48e1fa1a7.png)
+![DOM Preview](https://user-images.githubusercontent.com/34854689/221614401-37bcf860-554f-466c-a7a0-abf5d3da3407.png)
+
 # notes
 string buffer support required!
-you can get latest luvit build here: https://github.com/truemedian/luvit-bin
+to got string buffer support, you can get latest luvit build here: https://github.com/truemedian/luvit-bin
  
 dont like `<lua> ... </lua>` xml tag style? 
 you can pass `"<?lua"` in `tag_open` & `?>` in `tag_close` arguments
