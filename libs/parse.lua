@@ -62,7 +62,7 @@ return function(luaTemplate)
 				tag_open 		= echo_open,
 				tag_close 		= echo_close,
 				format 			= "print(%s);",
-				assert_error 	= "Syntax error: %s closing echo '".. echo_close .."' expected after '".. echo_open .."'",
+				assert_error 	= "Syntax error: %s closing string interpolation '".. echo_close .."' expected after '".. echo_open .."'",
 			}, function(raw2)
 				stdout:put(raw2code:format(raw2))
 			end)
