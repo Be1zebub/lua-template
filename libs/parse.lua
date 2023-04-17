@@ -2,6 +2,12 @@ local stdout = require("string.buffer").new()
 
 local function parse(data, raw_cback)
 	local prev_f = 1
+
+	if data.code:find(data.tag_open, prev_f, true) == nil then
+		raw_cback(data.code)
+		return
+	end
+
 	while true do
 		local tag_start, tag_end = data.code:find(data.tag_open, prev_f, true)
 		if tag_start == nil then break end
@@ -41,10 +47,28 @@ end
 
 local echo_open, echo_close = "${", "}"
 
+-- todo new parser:
+-- syntax: ?{request.userid}(logout, login)
+--[[ how it works:
+	local statement = request.userid
+	local stdout = {
+		[1] = "logout"
+		[2] = "login"
+	}
+
+	if statement then
+		if stdout[1] then print(stdout[1]) end
+	elseif stdout[2] then
+		print(stdout[2])
+	end
+]]--
+
 return function(luaTemplate)
 	function luaTemplate:parse(code, tag_open, tag_close)
 		tag_open 	= tag_open or "<lua>"
 		tag_close 	= tag_close or "</lua>"
+
+		code = code:gsub("<!%-%-.-%-%->", ""):gsub("/%*.-%*/", "") -- strip comments
 
 		local raw2code = format_print(code)
 

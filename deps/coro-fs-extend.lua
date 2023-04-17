@@ -1,3 +1,5 @@
+local pathJoin = require("pathjoin").pathJoin
+
 return function(fs)
 	fs.exists = require("fs").existsSync
 	fs.appendFile = require("fs").appendFileSync

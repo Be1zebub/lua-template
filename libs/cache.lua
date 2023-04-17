@@ -11,18 +11,25 @@ return function(luaTemplate)
 	end
 
 	function luaTemplate:cache(code, uid, ttl, env, tag_open, tag_close)
-		if uid == nil then
-			uid = debug.traceback()
+		local shouldCache = ttl and ttl > 0
+
+		if shouldCache then
+			if uid == nil then
+				uid = debug.traceback()
+			end
+
+			local compiled = self:getCache(uid)
+			if compiled then return compiled end
 		end
 
-		local compiled = self:getCache(uid)
-		if compiled then return compiled end
-
 		compiled = self:compile(code, env, tag_open, tag_close)
-		cache[uid] = {
-			func = compiled,
-			aliveUntil = time() + (ttl or 10)
-		}
+
+		if shouldCache then
+			cache[uid] = {
+				func = compiled,
+				aliveUntil = time() + (ttl or 10)
+			}
+		end
 
 		return compiled
 	end

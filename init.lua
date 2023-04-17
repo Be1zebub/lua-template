@@ -25,4 +25,23 @@ setmetatable(luaTemplate, {
 	end
 })
 
+function luaTemplate:weblit(path, ttl, env, tag_open, tag_close)
+	return function(request, response)
+		env.request = request
+		env.response = response
+
+		local succ, stdout = self:include(path, ttl, env, tag_open, tag_close)
+
+		if succ then
+			response.code = 200
+			response.body = stdout
+		else
+			response.code = 500
+			response.body = "Internal Server Error"
+
+			p("Weblit template `".. path .."` error!", stdout)
+		end
+	end
+end
+
 return luaTemplate
