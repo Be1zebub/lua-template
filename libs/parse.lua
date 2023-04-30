@@ -1,4 +1,6 @@
 local stdout = require("string.buffer").new()
+local fs = require("coro-fs")
+require("coro-fs-extend")(fs)
 
 local function parse(data, raw_cback)
 	local prev_f = 1
@@ -47,29 +49,71 @@ end
 
 local echo_open, echo_close = "${", "}"
 
--- todo new parser:
--- syntax: ?{request.userid}(logout, login)
---[[ how it works:
-	local statement = request.userid
-	local stdout = {
-		[1] = "logout"
-		[2] = "login"
-	}
+--[[
+local function lua_gsub(str, pattern, replacement, maxReplaces)
+	maxReplaces = maxReplaces or #str + 1
+	local start = 1
 
-	if statement then
-		if stdout[1] then print(stdout[1]) end
-	elseif stdout[2] then
-		print(stdout[2])
+	for _ = 1, maxReplaces do
+		local find_start, find_end = str:find(pattern, start)
+		if find_start == nil then break end
+
+		local found = str:sub(find_start, find_end)
+
+		str = str:sub(1, find_start - 1) .. (
+			type(replacement) ~= "function" and replacement or replacement(found:match(pattern)) -- table unimplemented yet
+		) .. str:sub(find_end + 1)
+		start = find_end + 1
 	end
+
+	return str
+end
 ]]--
+
+local function parse_includes(self, code)
+	local contents = {}
+	for path in code:gmatch("<include>(.-)</include>") do
+		local succ, result = self:eval(path, getfenv(0)) -- if src includes <lua></lua> or ${}
+
+		if succ then
+			if fs.exists(result) then
+				contents[path] = fs.readFile(result)
+			else
+				if self.debug then p("<include> file doesnt exists", result) end
+				contents[path] = "<include> file \"".. result .."\" doesnt exists"
+			end
+		else
+			contents[path] = "<include> parse error \"".. path .."\" ".. result
+		end
+	end
+
+	return code:gsub("<include>(.-)</include>", contents)
+--[[
+	code = lua_gsub(code, "<include src=\"(.-)\">(.-)</include>", function(path, inner) -- string.gsub callback doesnt works with coroutines
+		local succ
+		succ, path = self:eval(path, getfenv(0)) -- if src includes <lua></lua> or ${}
+
+		if succ == false then
+			return "<include> src parse error \"".. path .."\""
+		end
+
+		if fs.exists(path) == false then
+			if self.debug then p("doesnt exists", path) end
+			return "<include> src file \"".. path .."\" doesnt exists"
+		end
+
+		return fs.readFile(path):format(inner)
+	end)
+]]--
+end
 
 return function(luaTemplate)
 	function luaTemplate:parse(code, tag_open, tag_close)
 		tag_open 	= tag_open or "<lua>"
 		tag_close 	= tag_close or "</lua>"
 
+		code = parse_includes(self, code)
 		code = code:gsub("<!%-%-.-%-%->", ""):gsub("/%*.-%*/", "") -- strip comments
-
 		local raw2code = format_print(code)
 
 		parse({

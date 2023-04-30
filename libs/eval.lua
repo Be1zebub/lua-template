@@ -2,16 +2,16 @@ local stdout_buff = require("string.buffer").new() -- get-lit is a bit deprecate
 local function print_buffer(...)
 	local data = {...}
 	if #data == 1 then
-		stdout_buff:put(data[1])
+		stdout_buff:put(tostring(data[1]))
 		return
 	end
 
 	for i = 1, #data - 1 do
-		stdout_buff:put(data[i])
+		stdout_buff:put(tostring(data[i]))
 		stdout_buff:put("\t")
 	end
 
-	stdout_buff:put(data[#data])
+	stdout_buff:put(tostring(data[#data]))
 end
 
 return function(luaTemplate)
