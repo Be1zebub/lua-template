@@ -16,7 +16,7 @@ end
 
 return function(luaTemplate)
 	function luaTemplate:compile(code, env, tag_open, tag_close)
-		setmetatable(env or {}, {__index = _G})
+		env = setmetatable(env or {}, {__index = _G})
 		env.print = print_buffer
 		env.require = require
 		env.luaTemplate = self

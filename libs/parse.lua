@@ -73,7 +73,7 @@ end
 local function parse_includes(self, code)
 	local contents = {}
 	for path in code:gmatch("<include>(.-)</include>") do
-		local succ, result = self:eval(path, getfenv(0)) -- if src includes <lua></lua> or ${}
+		local succ, result = self:eval(path) -- if src includes <lua></lua> or ${}
 
 		if succ then
 			if fs.exists(result) then
