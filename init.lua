@@ -9,23 +9,22 @@ local luaTemplate = {
 	source = "https://github.com/Be1zebub/lua-template"
 }
 
-require("util")(luaTemplate)
 require("parse")(luaTemplate)
 require("cache")(luaTemplate)
 require("eval")(luaTemplate)
 require("include")(luaTemplate)
 require("weblit")(luaTemplate)
 
-function luaTemplate:load(code, uid, ttl, env, tag_open, tag_close)
+function luaTemplate:load(code, uid, ttl, env)
 	return self:eval(
-		self:cache(code, uid, ttl, env, tag_open, tag_close),
+		self:cache(code, uid, ttl, env),
 		env, tag_open, tag_close
 	)
 end
 
 setmetatable(luaTemplate, {
-	__call = function(_, code, uid, ttl, env, tag_open, tag_close)
-		luaTemplate:load(code, uid, ttl, env, tag_open, tag_close)
+	__call = function(_, code, uid, ttl, env)
+		luaTemplate:load(code, uid, ttl, env)
 	end
 })
 

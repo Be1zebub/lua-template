@@ -13,7 +13,7 @@ local fs = require("coro-fs")
 require("coro-fs-extend")(fs)
 
 return function(luaTemplate)
-	function luaTemplate:weblit(path, env, tag_open, tag_close)
+	function luaTemplate:weblit(path, env)
 		if fs.exists(path) == false then
 			p("luaTemplate:weblit", path, "doesnt exists")
 
@@ -25,9 +25,13 @@ return function(luaTemplate)
 
 		env = env or {}
 
-		local run
+		local run, err
 		local function recompile()
-			run = self:compile(fs.readFile(path), env, tag_open, tag_close)
+			run, err = self:compile(fs.readFile(path), env)
+			if run == false then
+				p("luaTemplate:weblit \"".. path .."\" compile error!")
+				print(err)
+			end
 		end
 		recompile()
 
@@ -55,7 +59,8 @@ return function(luaTemplate)
 				response.code = 500
 				response.body = "Internal Server Error"
 
-				p("Weblit template `".. path .."` error!", result)
+				p("Weblit template `".. path .."` error!")
+				print(result)
 			end
 		end
 	end

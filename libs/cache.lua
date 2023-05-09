@@ -10,7 +10,7 @@ return function(luaTemplate)
 		end
 	end
 
-	function luaTemplate:cache(code, uid, ttl, env, tag_open, tag_close)
+	function luaTemplate:cache(code, uid, ttl, env)
 		local shouldCache = ttl and ttl > 0
 
 		if shouldCache then
@@ -22,7 +22,7 @@ return function(luaTemplate)
 			if compiled then return compiled end
 		end
 
-		compiled = self:compile(code, env, tag_open, tag_close)
+		compiled = self:compile(code, env)
 
 		if shouldCache then
 			cache[uid] = {

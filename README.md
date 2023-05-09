@@ -1,30 +1,37 @@
 # lua-template
 php style html+lua inline templater for luvit
+deps: jit `string.buffer`, luvit `uv` (used in `:weblit` for fs watch), luvit `coro-fs` (used in `:include` & `:weblit`)
 
 # usage
 ```lua
-local luaTemplate = require("lua-template")
+-- /init.lua
+local app = require("weblit-app")
 
-local succ, stdout = luaTemplate:include("index.html", 10, { -- file-path, cache-ttl, environment-table
-	req = req,
-	res = res
+app.bind({
+	host = "127.0.0.1",
+	port = 80
 })
 
-res:setHeader("Content-Type", "text/html")
-res:setHeader("Content-Length", #stdout)
-res:finish(stdout)
+app.route({
+		method = "GET",
+		path = "/"
+	}, require("lua-template"):weblit("views/index.html", {app = app}))
+
+app.start()
 ```
 ```html
-<lua>
+<!-- /views/index.html -->
+
+<?lua <!-- lua codeblock -->
 	function Hex(r, g, b)
 		return string.format("#%x", (r * 0x10000) + (g * 0x100) + b):upper()
 	end
-</lua>
+?>
 <html>
 <head>
 	<style type="text/css">
 		h1 {
-			color: ${ Hex(22, 160, 133) };
+			color: ${ Hex(22, 160, 133) }; <!-- echo codeblock -->
 		}
 
 		.user {
@@ -56,28 +63,28 @@ res:finish(stdout)
 <body>
 	<h1>Current time: ${os.time()}</h1>
 
-	<lua>
+	<?lua
 		local users = {
 			{id = 1, name = "Beelzebub", avatar = "https://avatars.githubusercontent.com/u/34854689", admin = true},
 			{id = 2, name = "John Doe", avatar = "https://i.imgur.com/gQMQB7e.jpeg"}
 		}
 
 		for i, user in ipairs(users) do
-	</lua>
+	?>
 		<div class="user" id="user-${user.id}">
 			<img class="avatar" src="${user.avatar}">
 			<span class="name"> ${user.name}</span>
-			<lua>
+			<?lua
 				if user.admin then
-			</lua>
+			?>
 				<span class="admin"> (admin)</span>
-			<lua>
+			<?lua
 				end
-			</lua>
+			?>
 		</div>
-	<lua>
+	<?lua
 		end
-	</lua>
+	?>
 </body>
 </html>
 ```
@@ -87,6 +94,3 @@ res:finish(stdout)
 # notes
 string buffer support required! 
 to got string buffer support, you can get latest luvit build here: https://github.com/truemedian/luvit-bin
- 
-dont like `<lua> ... </lua>` xml tag style? 
-you can pass `"<?lua"` in `tag_open` & `?>` in `tag_close` arguments
