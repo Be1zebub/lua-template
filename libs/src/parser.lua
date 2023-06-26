@@ -42,7 +42,7 @@ do
 
 	function parser:pull()
 		local compiled = stdout:get()
-		stdout:free()
+		stdout:reset()
 
 		return compiled
 	end
