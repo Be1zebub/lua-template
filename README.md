@@ -98,3 +98,35 @@ to got string buffer support, you can get latest luvit build here: https://githu
 # todo
 add templ style feature, i think it looks like a good api
 https://templ.guide/syntax-and-usage/elements/
+
+```lua
+-- обёртка над lua-template, позволяющая упаковывать конструкторы и их env в удобную функцию templ.render
+
+templ.new("button")
+:add("text", tostring) -- имя аргумента, конструктор аргумента
+:html("<button>${text}</button>")-- можно указать html код в виде строки
+:path("path/to/your/document.html") -- либо в виде пути к файлу
+
+templ.render("button", {text = "Click me"}) -- класс шаблона, аргументы шаблона - внутренне использует luaTemplate:eval(code, env) для рендера
+
+-- пример использования:
+templ.render("background")
+templ.render("header", {
+	user = oauth2:GetUser(request.cookie.token)
+})
+templ.render("promotion", {
+	search_placeholders = db:GetRandomAddons(5),
+	featured = db:GetFeatured()
+})
+templ.render("marketplace", {
+	newcommers = db:GetLatestAddons(4),
+	popular = db:GetPopularAddons(12)
+})
+templ.render("footer", {
+	stats = {
+		addonsLen = db:GetAddonsForSale(),
+		online = db:GetOnlineCount(),
+		visitors = db:GetUniqueVisitors()
+	}
+})
+```
