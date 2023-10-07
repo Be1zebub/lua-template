@@ -1,6 +1,6 @@
 # lua-template
 php style html+lua inline templater for luvit
-deps: jit `string.buffer`, luvit `uv` (used in `:weblit` for fs watch), luvit `coro-fs` (used in `:include` & `:weblit`)
+deps: jit `string.buffer`, luvit `uv` (used in `:weblit` for fs watch), luvit `coro-fs` (used in `:include` & `:weblit`) - all expect `string.buffer` is optional
 
 # usage
 ```lua
@@ -94,3 +94,7 @@ app.start()
 # notes
 string buffer support required! 
 to got string buffer support, you can get latest luvit build here: https://github.com/truemedian/luvit-bin
+
+# todo
+add templ style feature, i think it looks like a good api
+https://templ.guide/syntax-and-usage/elements/
