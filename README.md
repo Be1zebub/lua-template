@@ -129,4 +129,6 @@ templ.render("footer", {
 		visitors = db:GetUniqueVisitors()
 	}
 })
+
+response.body = templ.pop()
 ```
